@@ -23,6 +23,7 @@ from rest_framework import permissions, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from edx_django_utils.plugins import pluggable_override
 
 from lms.djangoapps.courseware.courses import get_course, get_course_with_access
 from common.djangoapps.edxmako.shortcuts import render_to_response
@@ -511,7 +512,7 @@ class CohortHandler(DeveloperErrorViewMixin, APIPermissions):
             * group_id: The integer identified of the specific group in the partition.
     """
     queryset = []
-
+    @pluggable_override('OVERRIDE_COHORT_HANDLER_GET')
     def get(self, request, course_key_string, cohort_id=None):
         """
         Endpoint to get either one or all cohorts.

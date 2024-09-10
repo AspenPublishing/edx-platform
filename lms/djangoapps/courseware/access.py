@@ -17,6 +17,7 @@ import logging
 from django.conf import settings  # pylint: disable=unused-import
 from django.contrib.auth.models import AnonymousUser
 from edx_django_utils.monitoring import function_trace
+from edx_django_utils.plugins import pluggable_override
 from opaque_keys.edx.keys import CourseKey, UsageKey
 from xblock.core import XBlock
 
@@ -704,6 +705,7 @@ def _has_staff_access_to_location(user, location, course_key=None):
     return _has_access_to_course(user, 'staff', course_key)
 
 
+@pluggable_override('OVERRIDE_HAS_ACCESS_TO_COURSE')
 def _has_access_to_course(user, access_level, course_key):
     """
     Returns True if the given user has access_level (= staff or
@@ -742,7 +744,7 @@ def _has_access_to_course(user, access_level, course_key):
     debug("Deny: user did not have correct access")
     return ACCESS_DENIED
 
-
+@pluggable_override('OVERRIDE_ADMINISTRATIVE_ACCESS_TO_COURSE_FOR_USER')
 def administrative_accesses_to_course_for_user(user, course_key):
     """
     Returns types of access a user have for given course.

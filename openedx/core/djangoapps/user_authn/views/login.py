@@ -57,6 +57,7 @@ from openedx.core.djangoapps.util.user_messages import PageLevelMessages
 from openedx.core.djangolib.markup import HTML, Text
 from openedx.core.lib.api.view_utils import require_post_params  # lint-amnesty, pylint: disable=unused-import
 from openedx.features.enterprise_support.api import activate_learner_enterprise, get_enterprise_learner_data_from_api
+from edx_django_utils.plugins import pluggable_override  # lint-amnesty, pylint: disable=import-error
 
 log = logging.getLogger("edx.student")
 AUDIT_LOG = logging.getLogger("audit")
@@ -220,7 +221,7 @@ def _log_and_raise_inactive_user_auth_error(unauthenticated_user):
         }
     )
 
-
+@pluggable_override('OVERRIDE_REMOTE_AUTHN_AUTHENTICATE')
 def _authenticate_first_party(request, unauthenticated_user, third_party_auth_requested):
     """
     Use Django authentication on the given request, using rate limiting if configured
@@ -499,6 +500,7 @@ def enterprise_selection_page(request, user, next_url):
     method='POST',
     block=False,
 )  # lint-amnesty, pylint: disable=too-many-statements
+@pluggable_override('OVERRIDE_LOGIN_USER')
 def login_user(request, api_version='v1'):  # pylint: disable=too-many-statements
     """
     AJAX request to log in the user.

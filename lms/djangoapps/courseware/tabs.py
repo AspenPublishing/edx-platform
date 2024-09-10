@@ -16,7 +16,7 @@ from openedx.core.lib.course_tabs import CourseTabPluginManager
 from openedx.features.course_experience import default_course_url
 from openedx.features.course_experience.url_helpers import get_learning_mfe_home_url
 from common.djangoapps.student.models import CourseEnrollment
-
+from edx_django_utils.plugins import pluggable_override
 
 class EnrolledTab(CourseTab):
     """
@@ -315,7 +315,7 @@ class DatesTab(EnrolledTab):
         tab_dict['link_func'] = link_func
         super().__init__(tab_dict)
 
-
+@pluggable_override("OVERRIDE_GET_COURSE_TAB_LIST")
 def get_course_tab_list(user, course):
     """
     Retrieves the course tab list from xmodule.tabs and manipulates the set as necessary

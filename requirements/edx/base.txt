@@ -1255,6 +1255,7 @@ zipp==3.18.1
     # via
     #   importlib-metadata
     #   importlib-resources
-
+azure-monitor-opentelemetry==1.6.2
+opentelemetry-instrumentation-django==0.48b0
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

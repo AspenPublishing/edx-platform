@@ -19,7 +19,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from edx_proctoring.api import does_backend_support_onboarding
 from edx_when.api import is_enabled_for_course
-from edx_django_utils.plugins import get_plugins_view_context
+from edx_django_utils.plugins import get_plugins_view_context, pluggable_override
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from openedx_filters.learning.filters import InstructorDashboardRenderStarted
@@ -106,6 +106,7 @@ def show_analytics_dashboard_message(course_key):
 
 @ensure_csrf_cookie
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
+@pluggable_override('OVERRIDE_INSTRUCTOR_DASHBOARD_2')
 def instructor_dashboard_2(request, course_id):  # lint-amnesty, pylint: disable=too-many-statements
     """ Display the instructor dashboard for a course. """
     try:

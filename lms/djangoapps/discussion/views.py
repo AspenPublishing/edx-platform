@@ -67,6 +67,7 @@ from openedx.core.djangoapps.django_comment_common.models import (
 from openedx.core.djangoapps.django_comment_common.utils import ThreadContext
 from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
 from openedx.features.course_duration_limits.access import generate_course_expired_fragment
+from edx_django_utils.plugins import pluggable_override
 
 User = get_user_model()
 log = logging.getLogger("edx.discussions")
@@ -211,6 +212,7 @@ def use_bulk_ops(view_func):
 
 @login_required
 @use_bulk_ops
+@pluggable_override('OVERRIDE_INLINE_DISCUSSION')
 def inline_discussion(request, course_key, discussion_id):
     """
     Renders JSON for DiscussionModules

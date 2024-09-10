@@ -10,10 +10,18 @@ It exposes a module-level variable named ``application``. Django's
 
 # Patch the xml libs
 from openedx.core.lib.safe_lxml import defuse_xml_libs
+
 defuse_xml_libs()
 
 import os  # lint-amnesty, pylint: disable=wrong-import-order, wrong-import-position
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lms.envs.aws")
+
+from azure.monitor.opentelemetry import configure_azure_monitor
+configure_azure_monitor(
+    connection_string=os.environ.get("AZURE_CONNECTION_STRING"),
+    live_stream=True
+)
+os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
 
 import lms.startup as startup  # lint-amnesty, pylint: disable=wrong-import-position
 startup.run()
